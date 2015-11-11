@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "nrf_delay.h"
+//#include "nrf_delay.h"
 #include "twi_master.h"
 #include "Gyro.h"
 
@@ -19,7 +19,7 @@
 #define MPU6050_RA_PWR_MGMT_1       0x6B
 #define MPU6050_RA_GYRO_CONFIG      0x1B
 #define MPU6050_RA_ACCEL_CONFIG     0x1C
-#define MPU6050_CLOCK_PLL_XGYRO         0x01
+#define MPU6050_CLOCK_PLL_XGYRO     0x01
 #define MPU6050_GYRO_FS_250         0x00
 #define MPU6050_ACCEL_FS_2          0x00
 #define MPU6050_RA_WHO_AM_I         0x75
@@ -83,8 +83,6 @@ void setSleepEnabled(bool enabled) {
 uint8_t getDeviceID(void) {
 //    I2Cdev::readBits(devAddr, MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
     uint8_t buffer[2];
-
-		printf("getting rotation!\n");
 	
     buffer[0] = MPU6050_RA_WHO_AM_I;
     twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
@@ -105,23 +103,23 @@ void gyroInit(void) {
     setSleepEnabled(false); // thanks to Jack Elston for pointing this one out!
 }
 
-void getRotation(uint16_t* x, uint16_t* y, uint16_t* z){	
-    uint8_t buffer[7];
+//void getRotation(uint16_t* x, uint16_t* y, uint16_t* z){	
+//    uint8_t buffer[7];
 
-		printf("getting rotation!\n");
-	
-    buffer[0] = MPU6050_RA_GYRO_XOUT_H;
-    twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
-    twi_master_transfer(devAddr | TWI_READ_BIT, buffer, 6, TWI_ISSUE_STOP);
-    
-    *x = (((uint16_t)buffer[0]) << 8) | buffer[1];
-    *y = (((uint16_t)buffer[2]) << 8) | buffer[3];
-    *z = (((uint16_t)buffer[4]) << 8) | buffer[5];
-	
-		printf("x = %i\n", *x);
-		printf("y = %i\n", *y);	
-		printf("z = %i\n", *z);
-}
+//		printf("getting rotation!\n");
+//	
+//    buffer[0] = MPU6050_RA_GYRO_XOUT_H;
+//    twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
+//    twi_master_transfer(devAddr | TWI_READ_BIT, buffer, 6, TWI_ISSUE_STOP);
+//    
+//    *x = (((uint16_t)buffer[0]) << 8) | buffer[1];
+//    *y = (((uint16_t)buffer[2]) << 8) | buffer[3];
+//    *z = (((uint16_t)buffer[4]) << 8) | buffer[5];
+//	
+//		printf("x = %i\n", *x);
+//		printf("y = %i\n", *y);	
+//		printf("z = %i\n", *z);
+//}
 
 uint16_t getRotationX() {
 //    I2Cdev::readBytes(devAddr, MPU6050_RA_GYRO_XOUT_H, 2, buffer);
