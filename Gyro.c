@@ -1,14 +1,16 @@
 // Gyro.c
 // Gyro I2C library
-// hardware:
+// hardware: MPU6050 IMU, nRF51 dev kit
 // Kevin Kelly
 // Run Beacon, LLC
 // November 8, 2015
 
+// This library is ported from an existing MPU6050 library for Arduino
+// find the original library here: http://bit.ly/1OEkZ73
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-//#include "nrf_delay.h"
 #include "twi_master.h"
 #include "Gyro.h"
 
@@ -25,7 +27,7 @@
 #define MPU6050_RA_WHO_AM_I         0x75
 
 void setClockSource(uint8_t source) {
-//    writeBits(devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
+//    I2Cdev::writeBits(devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
 	
 		uint8_t cmd[2];
 	
