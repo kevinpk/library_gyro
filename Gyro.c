@@ -25,6 +25,7 @@
 #define MPU6050_GYRO_FS_250         0x00
 #define MPU6050_ACCEL_FS_2          0x00
 #define MPU6050_RA_WHO_AM_I         0x75
+#define MPU6050_RA_ACCEL_XOUT_H     0x3B
 
 void setClockSource(uint8_t source) {
 //    I2Cdev::writeBits(devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
@@ -123,17 +124,15 @@ void gyroInit(void) {
 //		printf("z = %i\n", *z);
 //}
 
-uint16_t getRotationX() {
+int16_t getRotationX() {
 //    I2Cdev::readBytes(devAddr, MPU6050_RA_GYRO_XOUT_H, 2, buffer);
     uint8_t buffer[2];
-
-		printf("getting X rotation!\n");
 	
     buffer[0] = MPU6050_RA_GYRO_XOUT_H;
     twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
     twi_master_transfer(devAddr | TWI_READ_BIT, buffer, 2, TWI_ISSUE_STOP);
 	
-		printf("X = %X\n",(((int16_t)buffer[0]) << 8) | buffer[1]);	
+//		printf("X = %i\n",(((int16_t)buffer[0]) << 8) | buffer[1]);	
 	
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
@@ -142,17 +141,15 @@ uint16_t getRotationX() {
  * @see getMotion6()
  * @see MPU6050_RA_GYRO_YOUT_H
  */
-uint16_t getRotationY() {
+int16_t getRotationY() {
 //    I2Cdev::readBytes(devAddr, MPU6050_RA_GYRO_YOUT_H, 2, buffer);
     uint8_t buffer[2];
-
-		printf("getting Y rotation!\n");
 	
     buffer[0] = MPU6050_RA_GYRO_YOUT_H;
     twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
     twi_master_transfer(devAddr | TWI_READ_BIT, buffer, 2, TWI_ISSUE_STOP);
 	
-		printf("Y = %X\n", (((int16_t)buffer[0]) << 8) | buffer[1]);	
+		printf("Y = %i\n", (((int16_t)buffer[0]) << 8) | buffer[1]);	
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 /** Get Z-axis gyroscope reading.
@@ -160,16 +157,49 @@ uint16_t getRotationY() {
  * @see getMotion6()
  * @see MPU6050_RA_GYRO_ZOUT_H
  */
-uint16_t getRotationZ() {
+int16_t getRotationZ() {
 //    I2Cdev::readBytes(devAddr, MPU6050_RA_GYRO_ZOUT_H, 2, buffer);
     uint8_t buffer[2];
-
-		printf("getting Z rotation!\n");
 	
     buffer[0] = MPU6050_RA_GYRO_ZOUT_H;
     twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
     twi_master_transfer(devAddr | TWI_READ_BIT, buffer, 2, TWI_ISSUE_STOP);
 	
-		printf("Z = %X\n", (((int16_t)buffer[0]) << 8) | buffer[1]);	
+		printf("Z = %i\n", (((int16_t)buffer[0]) << 8) | buffer[1]);	
     return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+
+void setXGyroOffset(int16_t offset) {
+//    I2Cdev::writeWord(devAddr, MPU6050_RA_XG_OFFS_USRH, offset);
+}
+
+void setYGyroOffset(int16_t offset) {
+//    I2Cdev::writeWord(devAddr, MPU6050_RA_YG_OFFS_USRH, offset);
+}
+
+void setZGyroOffset(int16_t offset) {
+//    I2Cdev::writeWord(devAddr, MPU6050_RA_ZG_OFFS_USRH, offset);
+}
+
+void setZAccelOffset(int16_t offset) {
+//    I2Cdev::writeWord(devAddr, MPU6050_RA_ZA_OFFS_H, offset);
+}
+
+void setDMPEnabled(bool enabled) {
+//    I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
+}
+void resetDMP() {
+//    I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_RESET_BIT, true);
+}
+
+uint16_t getXTilt(void){
+    uint8_t buffer[14];
+	
+    buffer[0] = MPU6050_RA_ACCEL_XOUT_H;
+    twi_master_transfer(devAddr, buffer, 1, TWI_DONT_ISSUE_STOP);
+    twi_master_transfer(devAddr | TWI_READ_BIT, buffer, 14, TWI_ISSUE_STOP);
+
+//		printf("%X = 3.0i %5i° %5i°\n", ((((int16_t)buffer[0]) << 8) | buffer[1])/200, (((int16_t)buffer[2]) << 8) | buffer[3], (((int16_t)buffer[4]) << 8) | buffer[5]);
+	
+	return ((((int16_t)buffer[0]) << 8) | buffer[1])/200;
 }

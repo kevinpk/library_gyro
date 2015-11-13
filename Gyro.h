@@ -14,6 +14,13 @@
 //void getRotation(uint16_t* x, uint16_t* y, uint16_t* z);
 void gyroInit(void);
 bool gyroTestConnection(void);
-uint16_t getRotationX(void);
-uint16_t getRotationY(void);
-uint16_t getRotationZ(void);
+int16_t getRotationX(void);
+int16_t getRotationY(void);
+int16_t getRotationZ(void);
+void setXGyroOffset(int16_t offset);
+void setYGyroOffset(int16_t offset);
+void setZGyroOffset(int16_t offset);
+void setZAccelOffset(int16_t offset);
+void setDMPEnabled(bool enabled);
+void resetDMP();
+uint16_t getXTilt(void);
